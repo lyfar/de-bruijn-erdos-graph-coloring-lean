@@ -67,7 +67,7 @@ theorem Finset.rado_selection_constraints
 
 namespace SimpleGraph
 
-variable {V : Type u} {W : Type v} {n : ℕ}
+variable {V : Type u} {W C : Type v} {n : ℕ}
     (G : SimpleGraph V) (H : SimpleGraph W)
 
 /-- Finite-target graph-homomorphism compactness. If every finite induced
@@ -109,6 +109,36 @@ theorem not_nonempty_hom_iff_exists_finite_induced [Finite W] :
   rw [G.nonempty_hom_iff_finite_induced H]
   simp only [not_forall]
 
+/-- Coloring compactness for an arbitrary finite palette. If every finite
+induced subgraph has a coloring by `C`, then the whole graph does. -/
+theorem nonempty_coloring_of_finite_induced [Finite C]
+    (hfinite : ∀ s : Finset V,
+      Nonempty ((G.induce (↑s : Set V)).Coloring C)) :
+    Nonempty (G.Coloring C) := by
+  exact G.nonempty_hom_of_finite_induced (completeGraph C) hfinite
+
+/-- A coloring by a finite palette exists exactly when every finite induced
+subgraph has one. -/
+theorem nonempty_coloring_iff_finite_induced [Finite C] :
+    Nonempty (G.Coloring C) ↔
+      ∀ s : Finset V,
+        Nonempty ((G.induce (↑s : Set V)).Coloring C) := by
+  constructor
+  · rintro ⟨coloring⟩ s
+    exact ⟨coloring.comp
+      (Embedding.induce (G := G) (↑s : Set V)).toHom⟩
+  · exact G.nonempty_coloring_of_finite_induced
+
+/-- Failure of coloring by a finite palette is witnessed on a finite induced
+subgraph. -/
+theorem not_nonempty_coloring_iff_exists_finite_induced [Finite C] :
+    ¬Nonempty (G.Coloring C) ↔
+      ∃ s : Finset V,
+        ¬Nonempty ((G.induce (↑s : Set V)).Coloring C) := by
+  classical
+  rw [G.nonempty_coloring_iff_finite_induced]
+  simp only [not_forall]
+
 /-- **De Bruijn--Erdős compactness theorem.** If every finite induced subgraph
 of `G` is colorable with `n` colors, then `G` is colorable with `n` colors. -/
 theorem colorable_of_finite_induced_colorable
@@ -141,7 +171,7 @@ theorem not_colorable_iff_exists_finite_induced_not_colorable :
 
 section ListColoring
 
-variable {C : Type v} (available : V → Set C)
+variable (available : V → Set C)
 
 /-- A proper coloring in which every vertex receives a color from its
 prescribed finite list. -/
@@ -269,5 +299,63 @@ theorem exists_finite_induced_chromaticNumber_eq
   have hupper := chromaticNumber_mono_of_hom
     (Embedding.induce (G := G) (↑s : Set V)).toHom
   simpa [hchromatic] using hupper
+
+/-- A graph has finite chromatic number exactly when one finite number of
+colors works uniformly for all finite induced subgraphs. -/
+theorem chromaticNumber_ne_top_iff_exists_uniform_finite_induced_colorable :
+    G.chromaticNumber ≠ ⊤ ↔
+      ∃ n, ∀ s : Finset V,
+        (G.induce (↑s : Set V)).Colorable n := by
+  rw [chromaticNumber_ne_top_iff_exists]
+  constructor
+  · rintro ⟨n, hcolorable⟩
+    exact ⟨n, fun s =>
+      G.finite_induced_colorable_of_colorable hcolorable s⟩
+  · rintro ⟨n, hfinite⟩
+    exact ⟨n, G.colorable_of_finite_induced_colorable hfinite⟩
+
+/-- An infinite chromatic number is equivalent to finite obstructions to
+`n`-colorability for every finite `n`. -/
+theorem chromaticNumber_eq_top_iff_forall_exists_finite_induced_not_colorable :
+    G.chromaticNumber = ⊤ ↔
+      ∀ n, ∃ s : Finset V,
+        ¬(G.induce (↑s : Set V)).Colorable n := by
+  constructor
+  · intro htop n
+    rw [← G.not_colorable_iff_exists_finite_induced_not_colorable]
+    intro hcolorable
+    have hne : G.chromaticNumber ≠ ⊤ :=
+      chromaticNumber_ne_top_iff_exists.mpr ⟨n, hcolorable⟩
+    exact hne htop
+  · intro hfinite
+    by_contra hne
+    obtain ⟨n, hcolorable⟩ :=
+      chromaticNumber_ne_top_iff_exists.mp hne
+    obtain ⟨s, hnotColorable⟩ := hfinite n
+    exact hnotColorable
+      (G.finite_induced_colorable_of_colorable hcolorable s)
+
+/-- Equivalently, finite induced chromatic numbers are unbounded precisely
+when the whole graph has infinite chromatic number. -/
+theorem chromaticNumber_eq_top_iff_forall_exists_finite_induced_succ_le :
+    G.chromaticNumber = ⊤ ↔
+      ∀ n, ∃ s : Finset V,
+        ((n + 1 : ℕ) : ℕ∞) ≤
+          (G.induce (↑s : Set V)).chromaticNumber := by
+  constructor
+  · intro htop n
+    obtain ⟨s, hnotColorable⟩ :=
+      G.chromaticNumber_eq_top_iff_forall_exists_finite_induced_not_colorable.mp
+        htop n
+    exact ⟨s,
+      (G.induce (↑s : Set V)).succ_le_chromaticNumber_iff_not_colorable.mpr
+        hnotColorable⟩
+  · intro hunbounded
+    apply G.chromaticNumber_eq_top_iff_forall_exists_finite_induced_not_colorable.mpr
+    intro n
+    obtain ⟨s, hlower⟩ := hunbounded n
+    exact ⟨s,
+      (G.induce (↑s : Set V)).succ_le_chromaticNumber_iff_not_colorable.mp
+        hlower⟩
 
 end SimpleGraph

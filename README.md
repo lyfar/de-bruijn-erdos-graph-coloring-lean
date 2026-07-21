@@ -21,10 +21,11 @@ theorem SimpleGraph.colorable_of_finite_induced_colorable
     G.Colorable n
 ```
 
-The project also proves compactness for homomorphisms into finite target graphs and for coloring
-from finite vertex lists. Its obstruction theorem states that failure of `n`-colorability has a
-finite induced witness. If an infinite graph has a positive finite chromatic number, one of its
-finite induced subgraphs has the same chromatic number.
+The project also proves compactness for homomorphisms into finite target graphs, arbitrary finite
+color palettes, and coloring from finite vertex lists. Its obstruction theorem states that failure
+of `n`-colorability has a finite induced witness. If an infinite graph has a positive finite
+chromatic number, one of its finite induced subgraphs has the same chromatic number. The final
+theorems characterize infinite chromatic number by unbounded finite induced chromatic numbers.
 
 ## Claim boundary
 
@@ -50,8 +51,8 @@ python3 scripts/audit.py
 ```
 
 The audit rebuilds the project, rejects proof-gap and soundness escape tokens in the library
-sources, rejects compiler warnings, and checks each public theorem’s axiom dependencies. The only
-permitted dependencies are `Classical.choice`, `propext`, and `Quot.sound`.
+sources, rejects compiler warnings, and checks 21 public declarations for axiom dependencies. The
+only permitted dependencies are `Classical.choice`, `propext`, and `Quot.sound`.
 
 ## Proof provenance
 

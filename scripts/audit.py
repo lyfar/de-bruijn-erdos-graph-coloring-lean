@@ -17,7 +17,7 @@ FORBIDDEN = re.compile(
     r"|@\[\s*extern\b|\bset_option\b|\bnolint\b"
 )
 ALLOWED_AXIOMS = {"Classical.choice", "propext", "Quot.sound"}
-EXPECTED_AUDITS = 15
+EXPECTED_AUDITS = 21
 
 
 def run(*command: str) -> subprocess.CompletedProcess[str]:
