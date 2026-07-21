@@ -1,0 +1,17 @@
+import DeBruijnErdosGraphColoring
+
+#print axioms Finset.rado_selection_constraints
+#print axioms SimpleGraph.nonempty_hom_of_finite_induced
+#print axioms SimpleGraph.nonempty_hom_iff_finite_induced
+#print axioms SimpleGraph.not_nonempty_hom_iff_exists_finite_induced
+#print axioms SimpleGraph.colorable_of_finite_induced_colorable
+#print axioms SimpleGraph.finite_induced_colorable_of_colorable
+#print axioms SimpleGraph.colorable_iff_finite_induced_colorable
+#print axioms SimpleGraph.not_colorable_iff_exists_finite_induced_not_colorable
+#print axioms SimpleGraph.ListColoring.induce
+#print axioms SimpleGraph.nonempty_listColoring_of_finite_induced
+#print axioms SimpleGraph.nonempty_listColoring_iff_finite_induced
+#print axioms SimpleGraph.not_nonempty_listColoring_iff_exists_finite_induced
+#print axioms SimpleGraph.succ_le_chromaticNumber_iff_not_colorable
+#print axioms SimpleGraph.succ_le_chromaticNumber_iff_exists_finite_induced
+#print axioms SimpleGraph.exists_finite_induced_chromaticNumber_eq

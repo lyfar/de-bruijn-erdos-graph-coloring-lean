@@ -1,0 +1,11 @@
+name = "de-bruijn-erdos-graph-coloring-lean"
+version = "0.1.0"
+defaultTargets = ["DeBruijnErdosGraphColoring"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.32.0-rc1"
+
+[[lean_lib]]
+name = "DeBruijnErdosGraphColoring"
