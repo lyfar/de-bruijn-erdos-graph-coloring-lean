@@ -61,8 +61,8 @@ terms. The source article anchors the mathematical claim.
 
 ## Lean Pool
 
-A Lean Pool pull request will carry the same complete theory. This README will link it after the
-branch passes Lean Pool CI and review.
+[Lean Pool PR #275](https://github.com/Vilin97/lean-pool/pull/275) carries the same complete theory
+for upstream build, quality, and significance review.
 
 ## License
 
